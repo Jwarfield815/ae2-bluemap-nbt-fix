@@ -43,6 +43,7 @@ public class BlueMapNativeAddonTemplate implements Runnable {
 		}
 
 		logger.logInfo("Hello, " + config.getWorld() + "!");
+		System.out.println("enablajdlgakjgd");
 	};
 
 	final private Consumer<BlueMapAPI> onDisableListener = api -> {
