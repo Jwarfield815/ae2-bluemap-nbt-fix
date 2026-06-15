@@ -1,18 +1,24 @@
-package com.technicjelle.BlueMapNativeAddonTemplate;
+package com.technicjelle.zzzzzzzzzzz_ae2_addon;
 
 import com.technicjelle.BMUtils.BMNative.BMNLogger;
 import com.technicjelle.BMUtils.BMNative.BMNMetadata;
+import com.technicjelle.zzzzzzzzzzz_ae2_addon.render.cableRenderer;
 import com.technicjelle.UpdateChecker;
 import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.core.map.hires.block.BlockRendererType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.function.Consumer;
 
-public class BlueMapNativeAddonTemplate implements Runnable {
+public class zzzzzzzzzzz_ae2_addon implements Runnable {
 	private BMNLogger logger;
 	private UpdateChecker updateChecker;
 	private @Nullable Config config;
+
+	private void addBluemapRegistryValues() {
+		BlockRendererType.REGISTRY.register(cableRenderer.TYPE);
+	}
 
 	@Override
 	public void run() {
@@ -43,7 +49,6 @@ public class BlueMapNativeAddonTemplate implements Runnable {
 		}
 
 		logger.logInfo("Hello, " + config.getWorld() + "!");
-		System.out.println("enablajdlgakjgd");
 	};
 
 	final private Consumer<BlueMapAPI> onDisableListener = api -> {
