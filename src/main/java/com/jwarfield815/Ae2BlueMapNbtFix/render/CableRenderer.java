@@ -1,5 +1,6 @@
 package com.jwarfield815.Ae2BlueMapNbtFix.render;
 
+import com.technicjelle.BMUtils.BMNative.BMNLogger;
 import de.bluecolored.bluemap.core.map.TextureGallery;
 import de.bluecolored.bluemap.core.map.hires.RenderSettings;
 import de.bluecolored.bluemap.core.map.hires.TileModel;
@@ -9,19 +10,18 @@ import de.bluecolored.bluemap.core.map.hires.block.BlockRendererType;
 import de.bluecolored.bluemap.core.resources.ResourcePath;
 import de.bluecolored.bluemap.core.resources.pack.resourcepack.ResourcePack;
 import de.bluecolored.bluemap.core.resources.pack.resourcepack.blockstate.Variant;
-import de.bluecolored.bluemap.core.resources.pack.resourcepack.model.Element;
-import de.bluecolored.bluemap.core.resources.pack.resourcepack.model.Face;
-import de.bluecolored.bluemap.core.resources.pack.resourcepack.model.Model;
 import de.bluecolored.bluemap.core.util.Key;
 import de.bluecolored.bluemap.core.util.math.Color;
 import de.bluecolored.bluemap.core.world.block.BlockNeighborhood;
-import de.bluecolored.bluemap.core.world.block.ExtendedBlock;
-import de.bluecolored.bluenbt.BlueNBT;
 
-public class cableRenderer implements BlockRenderer {
+import java.io.IOException;
+
+public class CableRenderer implements BlockRenderer {
     public static final BlockRendererType TYPE = new BlockRendererType.Impl(
-            new Key("ae2", "cable_bus"), cableRenderer::new
+            new Key("ae2", "cable_bus"), CableRenderer::new
     );
+
+    private BMNLogger logger;
     private BlockNeighborhood block;
     private TileModelView blockModel;
     private Color blockColor;
@@ -29,8 +29,13 @@ public class cableRenderer implements BlockRenderer {
     private TextureGallery textureGallery;
     private ResourcePack resourcePack;
 
-    public cableRenderer(ResourcePack resourcePack, TextureGallery textureGallery, RenderSettings renderSettings) {
-        System.out.println("contstructor");
+    public CableRenderer(ResourcePack resourcePack, TextureGallery textureGallery, RenderSettings renderSettings) {
+        try {
+            logger = new BMNLogger(this.getClass().getClassLoader());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        logger.logInfo("contstructor");
         this.resourcePack = resourcePack;
         this.textureGallery = textureGallery;
     }
@@ -43,7 +48,7 @@ public class cableRenderer implements BlockRenderer {
         this.blockModel = blockModel;
         this.blockColor = color;
 
-        System.out.println("rendering");
+        logger.logInfo("rendering");
 
 //        Model testModel = this.resourcePack.getModels().get(new ResourcePath<>("minecraft:block/oak_planks"));
 

@@ -2,7 +2,7 @@ package com.jwarfield815.Ae2BlueMapNbtFix;
 
 import com.technicjelle.BMUtils.BMNative.BMNLogger;
 import com.technicjelle.BMUtils.BMNative.BMNMetadata;
-import com.jwarfield815.Ae2BlueMapNbtFix.render.cableRenderer;
+import com.jwarfield815.Ae2BlueMapNbtFix.render.CableRenderer;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.core.map.hires.block.BlockRendererType;
 import org.jetbrains.annotations.Nullable;
@@ -17,8 +17,8 @@ public class Ae2BlueMapNbtFix implements Runnable {
 	private @Nullable Config config;
 
 	private void addBluemapRegistryValues() {
-		System.out.println("About to register values");
-		BlockRendererType.REGISTRY.register(cableRenderer.TYPE);
+		logger.logInfo("About to register values");
+		BlockRendererType.REGISTRY.register(CableRenderer.TYPE);
 	}
 
 	@Override
