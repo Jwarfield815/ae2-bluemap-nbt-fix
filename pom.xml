@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.technicjelle</groupId>
-	<artifactId>BlueMapNativeAddonTemplate</artifactId>
+	<groupId>com.jwarfield815</groupId>
+	<artifactId>Ae2BlueMapNbtFix</artifactId>
 	<version>0.6</version>
 
 	<properties>
@@ -31,10 +31,6 @@
 						<relocation>
 							<pattern>com.technicjelle.BMUtils</pattern>
 							<shadedPattern>${project.groupId}.${project.artifactId}.shadow.BMUtils</shadedPattern>
-						</relocation>
-						<relocation>
-							<pattern>com.technicjelle.UpdateChecker</pattern>
-							<shadedPattern>${project.groupId}.${project.artifactId}.shadow.UpdateChecker</shadedPattern>
 						</relocation>
 						<relocation>
 							<pattern>org.spongepowered.configurate</pattern>
@@ -101,12 +97,6 @@
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.technicjelle</groupId>
-			<artifactId>UpdateChecker</artifactId>
-			<version>2.5.1</version>
-			<scope>compile</scope>
-		</dependency>
 		<dependency>
 			<groupId>de.bluecolored</groupId>
 			<artifactId>bluemap-common</artifactId>

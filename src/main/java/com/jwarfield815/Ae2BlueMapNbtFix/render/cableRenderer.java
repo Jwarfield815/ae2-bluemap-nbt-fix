@@ -1,4 +1,4 @@
-package com.technicjelle.BlueMapNativeAddonTemplate.render;
+package com.jwarfield815.Ae2BlueMapNbtFix.render;
 
 import de.bluecolored.bluemap.core.map.TextureGallery;
 import de.bluecolored.bluemap.core.map.hires.RenderSettings;

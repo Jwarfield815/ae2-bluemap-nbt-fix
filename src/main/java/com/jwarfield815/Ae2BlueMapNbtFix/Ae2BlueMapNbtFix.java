@@ -1,9 +1,8 @@
-package com.technicjelle.BlueMapNativeAddonTemplate;
+package com.jwarfield815.Ae2BlueMapNbtFix;
 
 import com.technicjelle.BMUtils.BMNative.BMNLogger;
 import com.technicjelle.BMUtils.BMNative.BMNMetadata;
-import com.technicjelle.BlueMapNativeAddonTemplate.render.cableRenderer;
-import com.technicjelle.UpdateChecker;
+import com.jwarfield815.Ae2BlueMapNbtFix.render.cableRenderer;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.core.map.hires.block.BlockRendererType;
 import org.jetbrains.annotations.Nullable;
@@ -13,9 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-public class BlueMapNativeAddonTemplate implements Runnable {
+public class Ae2BlueMapNbtFix implements Runnable {
 	private BMNLogger logger;
-	private UpdateChecker updateChecker;
 	private @Nullable Config config;
 
 	private void addBluemapRegistryValues() {
@@ -35,8 +33,6 @@ public class BlueMapNativeAddonTemplate implements Runnable {
 			throw new RuntimeException(e);
 		}
 		logger.logInfo("Starting " + addonID + " " + addonVersion);
-		updateChecker = new UpdateChecker("TechnicJelle", addonID, addonVersion);
-		updateChecker.checkAsync();
 
 		addBluemapRegistryValues();
 
@@ -45,7 +41,6 @@ public class BlueMapNativeAddonTemplate implements Runnable {
 	}
 
 	final private Consumer<BlueMapAPI> onEnableListener = api -> {
-		updateChecker.getUpdateMessage().ifPresent(logger::logWarning);
 
 		try {
 			config = Config.load(api);

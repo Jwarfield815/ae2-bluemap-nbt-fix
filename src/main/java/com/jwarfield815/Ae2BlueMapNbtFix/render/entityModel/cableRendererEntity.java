@@ -1,4 +1,4 @@
-package com.technicjelle.BlueMapNativeAddonTemplate.render.entityModel;
+package com.jwarfield815.Ae2BlueMapNbtFix.render.entityModel;
 
 import de.bluecolored.bluemap.core.util.Key;
 import de.bluecolored.bluemap.core.world.BlockEntity;

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "": {
+      "renderer": "ae2:cable_bus",
+      "model": "ae2:block/cable_bus"
+    }
+  }
+}
