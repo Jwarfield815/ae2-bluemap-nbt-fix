@@ -1,4 +1,4 @@
-package com.technicjelle.zzzzzzzzzzz_ae2_addon;
+package com.technicjelle.BlueMapNativeAddonTemplate;
 
 import com.technicjelle.BMUtils.BMNative.BMNConfigDirectory;
 import de.bluecolored.bluemap.api.BlueMapAPI;

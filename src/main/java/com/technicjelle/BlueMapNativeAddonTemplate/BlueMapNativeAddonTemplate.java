@@ -1,22 +1,25 @@
-package com.technicjelle.zzzzzzzzzzz_ae2_addon;
+package com.technicjelle.BlueMapNativeAddonTemplate;
 
 import com.technicjelle.BMUtils.BMNative.BMNLogger;
 import com.technicjelle.BMUtils.BMNative.BMNMetadata;
-import com.technicjelle.zzzzzzzzzzz_ae2_addon.render.cableRenderer;
+import com.technicjelle.BlueMapNativeAddonTemplate.render.cableRenderer;
 import com.technicjelle.UpdateChecker;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.core.map.hires.block.BlockRendererType;
 import org.jetbrains.annotations.Nullable;
 
+
+
 import java.io.IOException;
 import java.util.function.Consumer;
 
-public class zzzzzzzzzzz_ae2_addon implements Runnable {
+public class BlueMapNativeAddonTemplate implements Runnable {
 	private BMNLogger logger;
 	private UpdateChecker updateChecker;
 	private @Nullable Config config;
 
 	private void addBluemapRegistryValues() {
+		System.out.println("About to register values");
 		BlockRendererType.REGISTRY.register(cableRenderer.TYPE);
 	}
 
@@ -34,6 +37,9 @@ public class zzzzzzzzzzz_ae2_addon implements Runnable {
 		logger.logInfo("Starting " + addonID + " " + addonVersion);
 		updateChecker = new UpdateChecker("TechnicJelle", addonID, addonVersion);
 		updateChecker.checkAsync();
+
+		addBluemapRegistryValues();
+
 		BlueMapAPI.onEnable(onEnableListener);
 		BlueMapAPI.onDisable(onDisableListener);
 	}

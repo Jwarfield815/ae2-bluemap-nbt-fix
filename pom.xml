@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.technicjelle</groupId>
-	<artifactId>zzzzzzzzzzz_ae2_addon</artifactId>
+	<artifactId>BlueMapNativeAddonTemplate</artifactId>
 	<version>0.6</version>
 
 	<properties>
