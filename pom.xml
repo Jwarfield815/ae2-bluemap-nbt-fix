@@ -94,6 +94,10 @@
 			<id>spongepowered</id>
 			<url>https://repo.spongepowered.org/maven/</url>
 		</repository>
+		<repository>
+			<id>bluecolored</id>
+			<url>https://repo.bluecolored.de/releases</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -126,6 +130,11 @@
 			<artifactId>configurate-hocon</artifactId>
 			<version>4.2.0</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.bluecolored</groupId>
+			<artifactId>bluenbt</artifactId>
+			<version>3.5.0</version>
 		</dependency>
 	</dependencies>
 </project>
