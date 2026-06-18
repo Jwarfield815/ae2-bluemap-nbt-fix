@@ -33,6 +33,8 @@ public class CableRenderer implements BlockRenderer {
 
     private TextureGallery textureGallery;
     private ResourcePack resourcePack;
+    private float from = 0;
+    private float to = 16;
 
     public CableRenderer(ResourcePack resourcePack, TextureGallery textureGallery, RenderSettings renderSettings) {
         try {
@@ -50,27 +52,18 @@ public class CableRenderer implements BlockRenderer {
         this.block = block;
         this.blockModel = blockModel;
         this.blockColor = color;
-
-//        var black = resourcePack.getTexture(new ResourcePath<>("ae2:part/cable/smart/black"));
-//        var lime = resourcePack.getTexture(new ResourcePath<>("ae2:part/cable/smart/lime"));
-//        var red = resourcePack.getTexture(new ResourcePath<>("ae2:part/cable/smart/red"));
-//
-//        logger.logInfo("Black Texture exists? " + black.getResourcePath());
-//        logger.logInfo("Lime Texture exists? " + lime.getResourcePath());
-//        logger.logInfo("red Texture exists? " + red.getResourcePath());
-
-//        resourcePack.getTextures()
-//                .values().stream().filter(t -> t.getResourcePath().toString().contains("part/cable"))
-//                .forEach(t -> logger.logInfo(t.getResourcePath().toString()));
-
-        ResourcePath texture = new ResourcePath<>("minecraft:block/warped_planks");
+        String texturePath = "minecraft:block/warped_planks";
 
         BlockEntity blockEntity = block.getBlockEntity();
         if (blockEntity instanceof CableRendererEntity cableBus) {
             if (cableBus.getCable() != null) {
-                texture = makeCable(cableBus.getCable().id);
+                texturePath = makeCable(cableBus.getCable().id);
+            } else {
+                texturePath = makeTerminal(cableBus.getUp(), cableBus.getDown(), cableBus.getNorth(), cableBus.getSouth(), cableBus.getEast(), cableBus.getWest());
             }
         }
+
+        ResourcePath texture = new ResourcePath<>(texturePath);
 
         int textureId = textureGallery.get(texture);
 
@@ -79,63 +72,20 @@ public class CableRenderer implements BlockRenderer {
         TileModel model = blockModel.getTileModel();
         int face = blockModel.getStart();
 
-// DOWN
-        makeFace(model, face, textureId,
-                0,0,0,
-                16,0,0,
-                16,0,16,
-                0,0,16
-        );
-        face += 2;
-
-// UP
-        makeFace(model, face, textureId,
-                0,16,0,
-                0,16,16,
-                16,16,16,
-                16,16,0
-        );
-        face += 2;
-
-// NORTH
-        makeFace(model, face, textureId,
-                16,0,0,
-                0,0,0,
-                0,16,0,
-                16,16,0
-        );
-        face += 2;
-
-// SOUTH
-        makeFace(model, face, textureId,
-                0,0,16,
-                16,0,16,
-                16,16,16,
-                0,16,16
-        );
-        face += 2;
-
-// WEST
-        makeFace(model, face, textureId,
-                0,0,0,
-                0,0,16,
-                0,16,16,
-                0,16,0
-        );
-        face += 2;
-
-// EAST
-        makeFace(model, face, textureId,
-                16,0,16,
-                16,0,0,
-                16,16,0,
-                16,16,16
-        );
+        makeFacesHelper(model, face, textureId);
 
         blockModel.scale(1f / 16f, 1f / 16f, 1f / 16f);
     }
 
-    private ResourcePath makeCable(String cableId) {
+    private String makeTerminal(
+            CableRendererEntity.Up up, CableRendererEntity.Down down, CableRendererEntity.North north,
+            CableRendererEntity.South south, CableRendererEntity.East east, CableRendererEntity.West west
+            ) {
+
+        return "ae2:part/pattern_access_terminal_medium";
+    }
+
+    private String makeCable(String cableId) {
         if (cableId.contains("fluix")) logger.logInfo(cableId);
 
         String[] elements = cableId.split(":")[1].split("_");
@@ -146,14 +96,36 @@ public class CableRenderer implements BlockRenderer {
         String cableType = matcher.group(2);
         String cableColor = matcher.group(1);
 
-        if (cableType.equals("smart_dense")) cableType = "dense_smart";
-        if (cableType.equals("covered_dense")) cableType = "dense_covered";
+        switch(cableType) {
+            case "covered":
+                this.from = 5;
+                this.to = 11;
+                break;
+            case "covered_dense":
+                cableType = "dense_covered";
+                this.from = 3;
+                this.to = 13;
+                break;
+            case "glass":
+                this.from = 6;
+                this.to = 10;
+                break;
+            case "smart":
+                this.from = 5;
+                this.to = 11;
+                break;
+            case "smart_dense":
+                cableType = "dense_smart";
+                this.from = 3;
+                this.to = 13;
+                break;
+        }
         if (cableColor.equals("fluix")) cableColor = "transparent";
 
-        return new ResourcePath<>("ae2:part/cable/" + cableType + "/" + cableColor); //wrap in try catch???
+        return "ae2:part/cable/" + cableType + "/" + cableColor;
     }
 
-    private void makeFace(
+    private void makeFaces(
             TileModel model,
             int triangleStart,
             int textureId,
@@ -161,7 +133,8 @@ public class CableRenderer implements BlockRenderer {
             float x1, float y1, float z1,
             float x2, float y2, float z2,
             float x3, float y3, float z3,
-            float x4, float y4, float z4
+            float x4, float y4, float z4,
+            float uvFrom, float uvTo
     ) {
 
         int tri1 = triangleStart;
@@ -183,16 +156,16 @@ public class CableRenderer implements BlockRenderer {
 
         model.setUvs(
                 tri1,
-                0, 0,
-                1, 0,
-                1, 1
+                uvFrom, uvFrom,
+                uvTo, uvFrom,
+                uvTo, uvTo
         );
 
         model.setUvs(
                 tri2,
-                0, 0,
-                1, 1,
-                0, 1
+                uvFrom, uvFrom,
+                uvTo, uvTo,
+                uvFrom, uvTo
         );
 
         model.setMaterialIndex(tri1, textureId);
@@ -210,6 +183,67 @@ public class CableRenderer implements BlockRenderer {
         model.setSunlight(tri1, 15);
         model.setSunlight(tri2, 15);
     }
+    private void makeFacesHelper(TileModel model, int face, int textureId) {
+        // DOWN
+        makeFaces(model, face, textureId,
+                this.from, this.from, this.from,
+                this.to, this.from, this.from,
+                this.to, this.from, this.to,
+                this.from, this.from, this.to,
+                this.from / 16, this.to / 16
+        );
+        face += 2;
+
+        //UP
+        makeFaces(model, face, textureId,
+                this.from, this.to, this.from,
+                this.from, this.to, this.to,
+                this.to, this.to, this.to,
+                this.to, this.to, this.from,
+                this.from / 16, this.to / 16
+        );
+        face += 2;
+
+        //NORTH
+        makeFaces(model, face, textureId,
+                this.to, this.from, this.from,
+                this.from, this.from, this.from,
+                this.from, this.to, this.from,
+                this.to, this.to, this.from,
+                this.from / 16, this.to / 16
+        );
+        face += 2;
+
+        //SOUTH
+        makeFaces(model, face, textureId,
+                this.from, this.from, this.to,
+                this.to, this.from, this.to,
+                this.to, this.to, this.to,
+                this.from, this.to, this.to,
+                this.from / 16, this.to / 16
+        );
+        face += 2;
+
+        //WEST
+        makeFaces(model, face, textureId,
+                this.from, this.from, this.from,
+                this.from, this.from, this.to,
+                this.from, this.to, this.to,
+                this.from, this.to, this.from,
+                this.from / 16, this.to / 16
+        );
+        face += 2;
+
+        //EAST
+        makeFaces(model, face, textureId,
+                this.to, this.from, this.to,
+                this.to, this.from, this.from,
+                this.to, this.to, this.from,
+                this.to, this.to, this.to,
+                this.from / 16, this.to / 16
+        );
+    }
+
 }
 
 
