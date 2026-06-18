@@ -1,5 +1,6 @@
 package com.jwarfield815.Ae2BlueMapNbtFix.render;
 
+import com.jwarfield815.Ae2BlueMapNbtFix.render.entityModel.CableRendererEntity;
 import com.technicjelle.BMUtils.BMNative.BMNLogger;
 import de.bluecolored.bluemap.core.map.TextureGallery;
 import de.bluecolored.bluemap.core.map.hires.RenderSettings;
@@ -12,9 +13,13 @@ import de.bluecolored.bluemap.core.resources.pack.resourcepack.ResourcePack;
 import de.bluecolored.bluemap.core.resources.pack.resourcepack.blockstate.Variant;
 import de.bluecolored.bluemap.core.util.Key;
 import de.bluecolored.bluemap.core.util.math.Color;
+import de.bluecolored.bluemap.core.world.BlockEntity;
 import de.bluecolored.bluemap.core.world.block.BlockNeighborhood;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CableRenderer implements BlockRenderer {
     public static final BlockRendererType TYPE = new BlockRendererType.Impl(
@@ -42,19 +47,32 @@ public class CableRenderer implements BlockRenderer {
 
     @Override
     public void render(BlockNeighborhood block, Variant variant, TileModelView blockModel, Color color) {
-//        ExtendedBlock myBlock = block.getNeighborBlock(-23, 103, 15);
-
         this.block = block;
         this.blockModel = blockModel;
         this.blockColor = color;
 
-        logger.logInfo("rendering");
+//        var black = resourcePack.getTexture(new ResourcePath<>("ae2:part/cable/smart/black"));
+//        var lime = resourcePack.getTexture(new ResourcePath<>("ae2:part/cable/smart/lime"));
+//        var red = resourcePack.getTexture(new ResourcePath<>("ae2:part/cable/smart/red"));
+//
+//        logger.logInfo("Black Texture exists? " + black.getResourcePath());
+//        logger.logInfo("Lime Texture exists? " + lime.getResourcePath());
+//        logger.logInfo("red Texture exists? " + red.getResourcePath());
 
-//        Model testModel = this.resourcePack.getModels().get(new ResourcePath<>("minecraft:block/oak_planks"));
+//        resourcePack.getTextures()
+//                .values().stream().filter(t -> t.getResourcePath().toString().contains("part/cable"))
+//                .forEach(t -> logger.logInfo(t.getResourcePath().toString()));
 
-        int textureId = textureGallery.get(
-                new ResourcePath<>("minecraft:block/oak_planks")
-        );
+        ResourcePath texture = new ResourcePath<>("minecraft:block/warped_planks");
+
+        BlockEntity blockEntity = block.getBlockEntity();
+        if (blockEntity instanceof CableRendererEntity cableBus) {
+            if (cableBus.getCable() != null) {
+                texture = makeCable(cableBus.getCable().id);
+            }
+        }
+
+        int textureId = textureGallery.get(texture);
 
         blockModel.initialize();
         blockModel.add(12);
@@ -115,6 +133,24 @@ public class CableRenderer implements BlockRenderer {
         );
 
         blockModel.scale(1f / 16f, 1f / 16f, 1f / 16f);
+    }
+
+    private ResourcePath makeCable(String cableId) {
+        if (cableId.contains("fluix")) logger.logInfo(cableId);
+
+        String[] elements = cableId.split(":")[1].split("_");
+        Pattern pattern = Pattern.compile("ae2:(black|blue|brown|cyan|fluix|gray|green|light_blue|light_gray|lime|magenta|orange|pink|purple|red|transparent|white|yellow)_(covered|covered_dense|glass|smart|smart_dense)_cable");
+        Matcher matcher = pattern.matcher(cableId);
+        matcher.matches();
+
+        String cableType = matcher.group(2);
+        String cableColor = matcher.group(1);
+
+        if (cableType.equals("smart_dense")) cableType = "dense_smart";
+        if (cableType.equals("covered_dense")) cableType = "dense_covered";
+        if (cableColor.equals("fluix")) cableColor = "transparent";
+
+        return new ResourcePath<>("ae2:part/cable/" + cableType + "/" + cableColor); //wrap in try catch???
     }
 
     private void makeFace(

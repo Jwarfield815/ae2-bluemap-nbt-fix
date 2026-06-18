@@ -1,7 +1,10 @@
 package com.jwarfield815.Ae2BlueMapNbtFix.render.entityModel;
 
+import de.bluecolored.bluemap.core.util.Registry;
+import de.bluecolored.bluemap.core.world.mca.blockentity.BlockEntityType;
 import de.bluecolored.bluemap.core.world.mca.blockentity.MCABlockEntity;
 import de.bluecolored.bluenbt.NBTName;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,39 +13,46 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Getter
 @EqualsAndHashCode(callSuper = true)
-@ToString
-@SuppressWarnings({"FieldMayBeFinal", "unused"})
+@Data
 public class CableRendererEntity extends MCABlockEntity {
-    @Nullable String customName;
-    @Nullable String noteBlockSound;
-    @Nullable Profile profile;
+    @NBTName("cable") private Cable cable;
+    @NBTName("up") private Up up;
+    @NBTName("down") private Down down;
+    @NBTName("north") private North north;
+    @NBTName("south") private South south;
+    @NBTName("east") private East east;
+    @NBTName("west") private West west;
 
-    @Getter
-    @EqualsAndHashCode
-    @ToString
-    public static class Profile {
-
-        @Nullable UUID id;
-        @Nullable String name;
-        List<Property> properties = List.of();
-
+    public static class Cable {
+        @NBTName("id") public String id;
     }
 
-    @Getter
-    @EqualsAndHashCode
-    @ToString
-    public static class Property {
+    public static class Up {
+        @NBTName("id") public String upId;
+    }
 
-        String name;
-        String value;
-        @Nullable String signature;
+    public static class Down {
+        @NBTName("id") public String downId;
+    }
 
-        private Property(Map<String, Object> data) {
-            this.signature = (String) data.get("signature");
-            this.value = (String) data.getOrDefault("value", "");
-        }
+    public static class North {
+        @NBTName("id") public String northId;
+    }
 
+    public static class South {
+        @NBTName("id") public String southId;
+    }
+
+    public static class East {
+        @NBTName("id") public String eastId;
+    }
+
+    public static class West {
+        @NBTName("id") public String westId;
+    }
+
+    public CableRendererEntity() {
+        super();
     }
 }

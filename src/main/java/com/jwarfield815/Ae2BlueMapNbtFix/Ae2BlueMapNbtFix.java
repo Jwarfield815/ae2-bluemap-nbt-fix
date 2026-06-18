@@ -1,16 +1,20 @@
 package com.jwarfield815.Ae2BlueMapNbtFix;
 
+import com.jwarfield815.Ae2BlueMapNbtFix.render.CableRendererType;
+import com.jwarfield815.Ae2BlueMapNbtFix.render.entityModel.CableRendererEntity;
 import com.technicjelle.BMUtils.BMNative.BMNLogger;
 import com.technicjelle.BMUtils.BMNative.BMNMetadata;
 import com.jwarfield815.Ae2BlueMapNbtFix.render.CableRenderer;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.core.map.hires.block.BlockRendererType;
+import de.bluecolored.bluemap.core.world.mca.blockentity.BlockEntityType;
 import org.jetbrains.annotations.Nullable;
 
 
 
 import java.io.IOException;
 import java.util.function.Consumer;
+import de.bluecolored.bluemap.core.util.Key;
 
 public class Ae2BlueMapNbtFix implements Runnable {
 	private BMNLogger logger;
@@ -19,6 +23,7 @@ public class Ae2BlueMapNbtFix implements Runnable {
 	private void addBluemapRegistryValues() {
 		logger.logInfo("About to register values");
 		BlockRendererType.REGISTRY.register(CableRenderer.TYPE);
+		BlockEntityType.REGISTRY.register(new CableRendererType.Impl(new Key("ae2", "cable_bus"), CableRendererEntity.class));
 	}
 
 	@Override
